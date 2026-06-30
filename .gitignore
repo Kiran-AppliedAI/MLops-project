@@ -11,3 +11,4 @@ override.tf.json
 crash.log
 .idea/
 .DS_Store
+opsrabbit-agent-key.json
