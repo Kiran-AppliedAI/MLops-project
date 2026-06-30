@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clientfacing-ui
+  namespace: production
+  labels:
+    app: clientfacing-ui
+    team: frontend
+    version: v1.2.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: clientfacing-ui
+  template:
+    metadata:
+      labels:
+        app: clientfacing-ui
+        version: v1.2.0
+    spec:
+      containers:
+        - name: ui
+          image: nginx:1.25-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: html-content
+              mountPath: /usr/share/nginx/html
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: html-content
+          configMap:
+            name: clientfacing-ui-config
+            items:
+              - key: index.html
+                path: index.html
+        - name: nginx-config
+          configMap:
+            name: clientfacing-ui-config
+            items:
+              - key: nginx.conf
+                path: default.conf

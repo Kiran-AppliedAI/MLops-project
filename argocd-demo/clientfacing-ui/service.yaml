@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clientfacing-ui
+  namespace: production
+  labels:
+    app: clientfacing-ui
+    team: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: clientfacing-ui

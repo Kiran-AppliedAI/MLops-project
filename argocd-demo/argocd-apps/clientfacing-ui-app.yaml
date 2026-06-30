@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: clientfacing-ui
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR_GITHUB_USERNAME/argocd-demo.git
+    targetRevision: main
+    path: apps/clientfacing-ui
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

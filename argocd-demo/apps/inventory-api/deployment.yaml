@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-api
+  namespace: production
+  labels:
+    app: inventory-api
+    team: backend
+    component: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inventory-api
+  template:
+    metadata:
+      labels:
+        app: inventory-api
+        team: backend
+        version: v3.1.0
+    spec:
+      containers:
+        - name: api
+          image: nginx:1.25-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: api-config
+              mountPath: /usr/share/nginx/html
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: api-config
+          configMap:
+            name: inventory-api-responses
+        - name: nginx-conf
+          configMap:
+            name: inventory-api-nginx-conf

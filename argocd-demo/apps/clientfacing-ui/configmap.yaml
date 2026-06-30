@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clientfacing-ui-content
+  namespace: production
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>Macy's Inventory Portal</title></head>
+    <body>
+      <h1>Macy's Inventory Management Portal</h1>
+      <p>Store Inventory Dashboard - v2.4.1</p>
+      <ul>
+        <li><a href="/api/stores">Store Inventory</a></li>
+        <li><a href="/api/departments">Department Summary</a></li>
+        <li><a href="/api/alerts">Active Alerts</a></li>
+      </ul>
+      <footer>Powered by OneX Platform | Last deployed: 2026-06-18</footer>
+    </body>
+    </html>

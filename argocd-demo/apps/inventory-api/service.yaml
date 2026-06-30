@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-api
+  namespace: production
+  labels:
+    app: inventory-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: inventory-api
